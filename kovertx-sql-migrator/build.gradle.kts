@@ -33,3 +33,7 @@ tasks.compileTestKotlin {
 tasks.sourcesJar {
     dependsOn(tasks.generateGrammarSource)
 }
+
+tasks.withType<Javadoc> {
+    (options as CoreJavadocOptions).addBooleanOption("Xdoclint:none", true)
+}

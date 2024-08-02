@@ -68,21 +68,19 @@ class Migrator(private val vertx: Vertx, options: MigratorOptions) {
             val driver = driverFactory.build(conn)
             return@withTransaction initAndRetrieveMigrationLogs(driver)
                 .compose { logs ->
-                    return@compose resolveMigrationsSteps().compose { plans ->
-
+                    resolveMigrationsSteps().compose { plans ->
                         if (logs.size > plans.size) {
-                            return@compose Future.failedFuture(
+                            Future.failedFuture(
                                 "Found ${logs.size} migration logs, but only know about " +
                                     "${plans.size} plans")
                         } else {
                             logger.info("Found ${logs.size} existing migration logs")
-                        }
-
-                        val root = Future.succeededFuture(MigrationStatus())
-                        plans.foldIndexed(root) { idx, prev, plan ->
-                            prev.compose { prevStatus ->
-                                val log = logs.getOrNull(idx)
-                                validateOrApplyStep(driver, plan, log, prevStatus)
+                            val root = Future.succeededFuture(MigrationStatus())
+                            plans.foldIndexed(root) { idx, prev, plan ->
+                                prev.compose { prevStatus ->
+                                    val log = logs.getOrNull(idx)
+                                    validateOrApplyStep(driver, plan, log, prevStatus)
+                                }
                             }
                         }
                     }.onSuccess { status ->

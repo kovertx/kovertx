@@ -19,7 +19,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "maven-publish")
-    apply(plugin = "com.diffplug.spotless")
+//    apply(plugin = "com.diffplug.spotless")
 
     publishing {
         repositories {
@@ -38,11 +38,11 @@ subprojects {
         apply(plugin = "java")
         apply(plugin = "kotlin")
 
-        configure<SpotlessExtension> {
-            kotlin {
-                ktfmt().kotlinlangStyle()
-            }
-        }
+//        configure<SpotlessExtension> {
+//            kotlin {
+//                ktfmt().kotlinlangStyle()
+//            }
+//        }
 
         dependencies {
             implementation(platform("io.vertx:vertx-stack-depchain:${findProperty("vertx.version")}"))
@@ -62,7 +62,7 @@ subprojects {
 
         publishing {
             publications {
-                register<MavenPublication>("maven") {
+                register<MavenPublication>("mavenJava") {
                     from(components["java"])
                 }
             }
@@ -81,6 +81,27 @@ subprojects {
         tasks.withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = "17"
+            }
+        }
+    }
+
+    afterEvaluate {
+        publishing {
+            publications {
+                withType(MavenPublication::class.java) {
+                    configurations.forEach { config ->
+                        config.allDependencies
+                            .filterIsInstance<ProjectDependency>()
+                            .forEach { dependency ->
+                                tasks.withType<PublishToMavenRepository> {
+                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToMavenRepository")
+                                }
+                                tasks.withType<PublishToMavenLocal> {
+                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToMavenLocal")
+                                }
+                            }
+                    }
+                }
             }
         }
     }

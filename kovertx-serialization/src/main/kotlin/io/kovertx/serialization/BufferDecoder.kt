@@ -1,12 +1,15 @@
 package io.kovertx.serialization
 
 import io.vertx.core.buffer.Buffer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
+
+@ExperimentalSerializationApi
 class BufferDecoder(val buffer: Buffer, private var pos: Int = 0, var elementsCount: Int = 0) :
     AbstractDecoder() {
     private var elementIndex = 0

@@ -1,6 +1,7 @@
 package io.kovertx.serialization
 
 import io.vertx.core.buffer.Buffer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.serializer
 
 object BufferCodec {
@@ -9,8 +10,9 @@ object BufferCodec {
         encoder.encodeSerializableValue(serializer(), value)
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     inline fun <reified T> decode(buffer: Buffer, pos: Int = 0): T {
-        val decoder = BufferDecoder(buffer)
+        val decoder = BufferDecoder(buffer, pos)
         return decoder.decodeSerializableValue(serializer())
     }
 }

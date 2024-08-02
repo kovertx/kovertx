@@ -10,7 +10,7 @@ class KonfigDelegateProperty<T>(private val retrievers: List<KonfigRetriever<T>>
     fun resolve(vertx: Vertx): Future<Void> {
         return retrievers
             .fold(Future.failedFuture<T>("no resolver")) { future, retriever ->
-                future.recover { t -> retriever(vertx) }
+                future.recover { _ -> retriever(vertx) }
             }
             .onSuccess { value = it }
             .mapEmpty()
@@ -18,6 +18,7 @@ class KonfigDelegateProperty<T>(private val retrievers: List<KonfigRetriever<T>>
 
     operator fun getValue(o: Any, p: KProperty<*>): T {
         if (value === UnitializedKonfigProperty) throw RuntimeException("Uninitialized konfig")
+        @Suppress("UNCHECKED_CAST")
         return value as T
     }
 

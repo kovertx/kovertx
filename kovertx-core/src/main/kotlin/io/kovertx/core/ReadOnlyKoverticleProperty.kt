@@ -18,6 +18,7 @@ class KoverticlePropertyImpl<T> : ReadWriteKoverticleProperty<T> {
     }
 
     override operator fun getValue(thisRef: Koverticle, property: KProperty<*>): T {
+        @Suppress("UNCHECKED_CAST")
         return value as T
     }
 

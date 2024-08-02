@@ -1,12 +1,14 @@
 package io.kovertx.serialization
 
 import io.vertx.core.buffer.Buffer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
+@OptIn(ExperimentalSerializationApi::class)
 class BufferEncoder(val output: Buffer) : AbstractEncoder() {
     override val serializersModule: SerializersModule = EmptySerializersModule()
 

@@ -65,9 +65,11 @@ abstract class TypedConfigRetriever<T>(protected val proxied: ConfigRetriever) {
     protected abstract fun decode(json: VertxJsonObject): T
 
     val cachedConfig
+        @Suppress("UNCHECKED_CAST")
         get() = proxied.cachedConfig.getValue("data") as T
 
     val config: Future<T>
+        @Suppress("UNCHECKED_CAST")
         get() = proxied.config.map { it.getValue("data") as T }
 }
 

@@ -6,6 +6,7 @@ import io.kovertx.serialization.BufferCodec
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.eventbus.EventBus
 import io.vertx.core.eventbus.MessageCodec
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
@@ -37,6 +38,7 @@ inline fun <reified T> makeKotlinxSerializationCodec(): MessageCodec<T, T> {
 inline fun <reified T> EventBus.registerKotlinxSerializationCodec() =
     registerDefaultCodec(T::class.java, makeKotlinxSerializationCodec())
 
+@OptIn(ExperimentalSerializationApi::class)
 inline fun <reified T> makeKotlinxSerializationJsonCodec(): MessageCodec<T, T> {
     return object : MessageCodec<T, T> {
         override fun name() = T::class.qualifiedName + ".Json"
