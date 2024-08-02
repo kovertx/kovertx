@@ -94,7 +94,7 @@ subprojects {
                             .filterIsInstance<ProjectDependency>()
                             .forEach { dependency ->
                                 tasks.withType<PublishToMavenRepository> {
-                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToMavenRepository")
+                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToGithubPackagesRepository")
                                 }
                                 tasks.withType<PublishToMavenLocal> {
                                     mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToMavenLocal")
