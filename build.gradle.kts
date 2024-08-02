@@ -84,25 +84,4 @@ subprojects {
             }
         }
     }
-
-    afterEvaluate {
-        publishing {
-            publications {
-                withType(MavenPublication::class.java) {
-                    configurations.forEach { config ->
-                        config.allDependencies
-                            .filterIsInstance<ProjectDependency>()
-                            .forEach { dependency ->
-                                tasks.withType<PublishToMavenRepository> {
-                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToGithubPackagesRepository")
-                                }
-                                tasks.withType<PublishToMavenLocal> {
-                                    mustRunAfter("${dependency.dependencyProject.path}:publishMavenJavaPublicationToMavenLocal")
-                                }
-                            }
-                    }
-                }
-            }
-        }
-    }
 }
