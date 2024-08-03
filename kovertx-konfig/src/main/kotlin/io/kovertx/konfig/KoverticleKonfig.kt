@@ -12,5 +12,5 @@ fun <T> Koverticle.konfig(block: KonfigBuilder<T>.() -> Unit): KonfigDelegatePro
 }
 
 fun <T : Konfigurable> Koverticle.resolveKonfig(konfig: T) = async {
-    konfig.resolve(vertx).map(konfig)
+    return@async konfig.resolve(vertx).map(konfig)
 }

@@ -58,8 +58,11 @@ open class AbstractKoverticle : Koverticle {
     /** @see Verticle.start */
     final override fun start(startPromise: Promise<Void>) {
         println("Koverticle starting with ${warmupActions.size} prestarts")
-        val warmupFutures = warmupActions.map { it() }
-        Future.all(warmupFutures)
+
+        val warmup = warmupActions.fold(Future.succeededFuture<Void>()) { prev, action ->
+            prev.compose { action() }
+        }
+        warmup
             .onSuccess { startAsync(startPromise) }
             .onFailure { startPromise.fail(it) }
     }
