@@ -16,6 +16,7 @@ dependencies {
         api(project(":kovertx-web"))
         api(project(":kovertx-sql-client"))
         api(project(":kovertx-sql-migrator"))
+        api(project(":kovertx-resilience"))
     }
 }
 
